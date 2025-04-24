@@ -15,161 +15,68 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-// Generate random CPU usage data
-const generateCpuData = (count) => {
-    const data = []
-    for (let i = 0; i < 12; i++) {
-        const cpuData = []
-        for (let j = 0; j < count; j++) {
-            // Generate values that mostly stay below 25% with occasional spikes
-            const baseValue = Math.random() * 5
-            const spike = Math.random() > 0.9 ? Math.random() * 20 : 0
-            cpuData.push(baseValue + spike)
-        }
-        data.push(cpuData)
-    }
-    return data
+// Define colors for each CPU core
+const cpuColors = {
+    "CPU1": { border: "rgb(239, 68, 68)", background: "rgba(239, 68, 68, 0.5)" },
+    "CPU2": { border: "rgb(249, 115, 22)", background: "rgba(249, 115, 22, 0.5)" },
+    "CPU3": { border: "rgb(234, 179, 8)", background: "rgba(234, 179, 8, 0.5)" },
+    "CPU4": { border: "rgb(132, 204, 22)", background: "rgba(132, 204, 22, 0.5)" },
+    "CPU5": { border: "rgb(236, 72, 153)", background: "rgba(236, 72, 153, 0.5)" },
+    "CPU6": { border: "rgb(6, 182, 212)", background: "rgba(6, 182, 212, 0.5)" },
+    "CPU7": { border: "rgb(59, 130, 246)", background: "rgba(59, 130, 246, 0.5)" },
+    "CPU8": { border: "rgb(99, 102, 241)", background: "rgba(99, 102, 241, 0.5)" },
+    "CPU9": { border: "rgb(147, 51, 234)", background: "rgba(147, 51, 234, 0.5)" },
+    "CPU10": { border: "rgb(244, 114, 182)", background: "rgba(244, 114, 182, 0.5)" },
+    "CPU11": { border: "rgb(156, 163, 175)", background: "rgba(156, 163, 175, 0.5)" },
+    "CPU12": { border: "rgb(139, 92, 246)", background: "rgba(139, 92, 246, 0.5)" }
 }
 
-function CpuChart() {
-    const [cpuData, setCpuData] = useState([])
-    const [labels, setLabels] = useState([])
+function CpuChart({ systemStats }) {
+    const [cpuData, setCpuData] = useState({});
+    const [labels, setLabels] = useState(Array(60).fill(""));
 
     useEffect(() => {
-        // Generate initial data
-        const initialLabels = Array.from({ length: 60 }, (_, i) => `${i} secs`)
-        setLabels(initialLabels)
-        setCpuData(generateCpuData(60))
+        if (!systemStats || !systemStats.cpuCores || systemStats.cpuCores.length === 0) {
+            return;
+        }
 
-        // Update data every second
-        const interval = setInterval(() => {
-            setCpuData((prevData) => {
-                return prevData.map((cpuCore) => {
-                    const newData = [...cpuCore.slice(1)]
-                    const baseValue = Math.random() * 5
-                    const spike = Math.random() > 0.9 ? Math.random() * 20 : 0
-                    newData.push(baseValue + spike)
-                    return newData
-                })
-            })
-        }, 1000)
+        setCpuData(prevData => {
+            const newData = { ...prevData };
 
-        return () => clearInterval(interval)
-    }, [])
+            // Initialize data structure for each CPU core if it doesn't exist
+            systemStats.cpuCores.forEach(core => {
+                if (!newData[core.id]) {
+                    newData[core.id] = Array(60).fill(0);
+                }
 
+                // Add new data point and remove oldest one
+                newData[core.id] = [...newData[core.id].slice(1), parseFloat(core.usage)];
+            });
+
+            return newData;
+        });
+
+        // Update time labels
+        setLabels(prev => {
+            const now = new Date();
+            const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            return [...prev.slice(1), timeStr];
+        });
+    }, [systemStats]);
+
+    // Prepare chart data
     const chartData = {
         labels,
-        datasets: [
-            {
-                label: "CPU1",
-                data: cpuData[0] || [],
-                borderColor: "rgb(239, 68, 68)",
-                backgroundColor: "rgba(239, 68, 68, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU2",
-                data: cpuData[1] || [],
-                borderColor: "rgb(249, 115, 22)",
-                backgroundColor: "rgba(249, 115, 22, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU3",
-                data: cpuData[2] || [],
-                borderColor: "rgb(234, 179, 8)",
-                backgroundColor: "rgba(234, 179, 8, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU4",
-                data: cpuData[3] || [],
-                borderColor: "rgb(132, 204, 22)",
-                backgroundColor: "rgba(132, 204, 22, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU5",
-                data: cpuData[4] || [],
-                borderColor: "rgb(236, 72, 153)",
-                backgroundColor: "rgba(236, 72, 153, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU6",
-                data: cpuData[5] || [],
-                borderColor: "rgb(6, 182, 212)",
-                backgroundColor: "rgba(6, 182, 212, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU7",
-                data: cpuData[6] || [],
-                borderColor: "rgb(59, 130, 246)",
-                backgroundColor: "rgba(59, 130, 246, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU8",
-                data: cpuData[7] || [],
-                borderColor: "rgb(99, 102, 241)",
-                backgroundColor: "rgba(99, 102, 241, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU9",
-                data: cpuData[8] || [],
-                borderColor: "rgb(147, 51, 234)",
-                backgroundColor: "rgba(147, 51, 234, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU10",
-                data: cpuData[9] || [],
-                borderColor: "rgb(244, 114, 182)",
-                backgroundColor: "rgba(244, 114, 182, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU11",
-                data: cpuData[10] || [],
-                borderColor: "rgb(156, 163, 175)",
-                backgroundColor: "rgba(156, 163, 175, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-            {
-                label: "CPU12",
-                data: cpuData[11] || [],
-                borderColor: "rgb(139, 92, 246)",
-                backgroundColor: "rgba(139, 92, 246, 0.5)",
-                borderWidth: 1,
-                pointRadius: 0,
-                tension: 0.4,
-            },
-        ],
-    }
+        datasets: Object.keys(cpuData).map(cpuId => ({
+            label: cpuId,
+            data: cpuData[cpuId],
+            borderColor: cpuColors[cpuId]?.border || "rgb(156, 163, 175)",
+            backgroundColor: cpuColors[cpuId]?.background || "rgba(156, 163, 175, 0.5)",
+            borderWidth: 1,
+            pointRadius: 0,
+            tension: 0.4,
+        }))
+    };
 
     const options = {
         responsive: true,
@@ -214,9 +121,9 @@ function CpuChart() {
                 borderWidth: 1,
             },
         },
-    }
+    };
 
-    return <Line data={chartData} options={options} />
+    return <Line data={chartData} options={options} />;
 }
 
 export default CpuChart

@@ -11,41 +11,49 @@ import {
     Title,
     Tooltip,
     Legend,
+    Filler,
 } from "chart.js"
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+)
 
-// Generate random memory usage data
-const generateMemoryData = (count) => {
-    const memoryData = []
-    for (let i = 0; i < count; i++) {
-        // Generate values that stay around 57-60%
-        memoryData.push(57 + Math.random() * 3)
-    }
-    return memoryData
-}
-
-function MemoryChart() {
-    const [memoryData, setMemoryData] = useState([])
-    const [labels, setLabels] = useState([])
+function MemoryChart({ systemStats }) {
+    const [memoryData, setMemoryData] = useState(Array(60).fill(0));
+    const [swapData, setSwapData] = useState(Array(60).fill(0));
+    const [labels, setLabels] = useState(Array(60).fill(""));
 
     useEffect(() => {
-        // Generate initial data
-        const initialLabels = Array.from({ length: 60 }, (_, i) => `${i} secs`)
-        setLabels(initialLabels)
-        setMemoryData(generateMemoryData(60))
+        if (!systemStats || !systemStats.memoryDetails) {
+            return;
+        }
 
-        // Update data every second
-        const interval = setInterval(() => {
-            setMemoryData((prevData) => {
-                const newData = [...prevData.slice(1)]
-                newData.push(57 + Math.random() * 3)
-                return newData
-            })
-        }, 1000)
+        // Update memory usage data
+        setMemoryData(prev => {
+            const percentage = parseFloat(systemStats.memoryDetails.usedPercentage);
+            return [...prev.slice(1), percentage];
+        });
 
-        return () => clearInterval(interval)
-    }, [])
+        // Update swap usage data
+        setSwapData(prev => {
+            const percentage = parseFloat(systemStats.memoryDetails.swap.usedPercentage);
+            return [...prev.slice(1), percentage];
+        });
+
+        // Update time labels
+        setLabels(prev => {
+            const now = new Date();
+            const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            return [...prev.slice(1), timeStr];
+        });
+    }, [systemStats]);
 
     const chartData = {
         labels,
@@ -53,13 +61,23 @@ function MemoryChart() {
             {
                 label: "Memory",
                 data: memoryData,
+                borderColor: "rgb(236, 72, 153)",
+                backgroundColor: "rgba(236, 72, 153, 0.1)",
+                borderWidth: 1,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: true,
+            },
+            {
+                label: "Swap",
+                data: swapData,
                 borderColor: "rgb(34, 197, 94)",
                 backgroundColor: "rgba(34, 197, 94, 0.1)",
                 borderWidth: 1,
                 pointRadius: 0,
                 tension: 0.4,
                 fill: true,
-            },
+            }
         ],
     }
 

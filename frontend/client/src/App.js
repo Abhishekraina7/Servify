@@ -1,16 +1,72 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ChevronDown, ChevronRight } from "lucide-react"
 import CpuChart from "./components/CpuChart"
 import MemoryChart from "./components/MemoryChart"
 import NetworkChart from "./components/NetworkChart"
+import { io } from "socket.io-client"
 import "./App.css"
 
 function App() {
   const [cpuExpanded, setCpuExpanded] = useState(true)
   const [memoryExpanded, setMemoryExpanded] = useState(true)
   const [networkExpanded, setNetworkExpanded] = useState(true)
+
+  // State for system stats
+  const [systemStats, setSystemStats] = useState({
+    cpu: 0,
+    mem: 0,
+    disk: 0,
+    uptime: 0,
+    cpuCores: [],
+    memoryDetails: {
+      total: "0 B",
+      used: "0 B",
+      usedPercentage: "0",
+      cache: "0 B",
+      swap: {
+        total: "0 B",
+        used: "0 B",
+        usedPercentage: "0"
+      }
+    },
+    networkDetails: {
+      receiving: 0,
+      sending: 0,
+      totalReceived: "0 B",
+      totalSent: "0 B"
+    }
+  })
+
+  // Connect to socket.io server
+  useEffect(() => {
+    // Connect to the backend server
+    const socket = io('http://localhost:5000');
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    // Listen for system stats
+    socket.on('stats', (data) => {
+      console.log('Received stats:', data);
+      setSystemStats(data);
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Connection Error:', error);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+    // Cleanup function
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <div className="container">
@@ -23,69 +79,21 @@ function App() {
         {cpuExpanded && (
           <div className="section-content">
             <div className="chart-container">
-              <CpuChart />
+              <CpuChart systemStats={systemStats} />
             </div>
             <div className="cpu-legend">
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#ef4444" }}></div>
-                <span>CPU1</span>
-                <span className="cpu-value">9.9%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#f97316" }}></div>
-                <span>CPU2</span>
-                <span className="cpu-value">1.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#eab308" }}></div>
-                <span>CPU3</span>
-                <span className="cpu-value">2.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#84cc16" }}></div>
-                <span>CPU4</span>
-                <span className="cpu-value">0.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#ec4899" }}></div>
-                <span>CPU5</span>
-                <span className="cpu-value">4.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#06b6d4" }}></div>
-                <span>CPU6</span>
-                <span className="cpu-value">2.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#9333ea" }}></div>
-                <span>CPU9</span>
-                <span className="cpu-value">1.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#f472b6" }}></div>
-                <span>CPU10</span>
-                <span className="cpu-value">0.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#3b82f6" }}></div>
-                <span>CPU7</span>
-                <span className="cpu-value">2.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#6366f1" }}></div>
-                <span>CPU8</span>
-                <span className="cpu-value">1.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#9ca3af" }}></div>
-                <span>CPU11</span>
-                <span className="cpu-value">0.0%</span>
-              </div>
-              <div className="cpu-item">
-                <div className="color-box" style={{ backgroundColor: "#8b5cf6" }}></div>
-                <span>CPU12</span>
-                <span className="cpu-value">1.0%</span>
-              </div>
+              {systemStats.cpuCores.map((core) => (
+                <div className="cpu-item" key={core.id}>
+                  <div
+                    className="color-box"
+                    style={{
+                      backgroundColor: getCpuColor(core.id)
+                    }}
+                  ></div>
+                  <span>{core.id}</span>
+                  <span className="cpu-value">{core.usage}%</span>
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -100,34 +108,58 @@ function App() {
         {memoryExpanded && (
           <div className="section-content">
             <div className="chart-container">
-              <MemoryChart />
+              <MemoryChart systemStats={systemStats} />
             </div>
             <div className="memory-stats">
               <div className="memory-item">
                 <div className="pie-chart memory-pie">
-                  <div className="pie-segment" style={{ transform: "rotate(0deg)", backgroundColor: "#ec4899" }}></div>
                   <div
                     className="pie-segment"
-                    style={{ transform: "rotate(205deg)", backgroundColor: "transparent" }}
+                    style={{
+                      transform: "rotate(0deg)",
+                      backgroundColor: "#ec4899"
+                    }}
+                  ></div>
+                  <div
+                    className="pie-segment"
+                    style={{
+                      transform: `rotate(${3.6 * systemStats.memoryDetails.usedPercentage}deg)`,
+                      backgroundColor: "transparent"
+                    }}
                   ></div>
                 </div>
                 <div className="memory-details">
                   <div>Memory</div>
-                  <div>4.6 GB (57.3%) of 8.0 GB</div>
-                  <div>Cache 2.4 GB</div>
+                  <div>
+                    {systemStats.memoryDetails.used} ({systemStats.memoryDetails.usedPercentage}%)
+                    of {systemStats.memoryDetails.total}
+                  </div>
+                  <div>Cache {systemStats.memoryDetails.cache}</div>
                 </div>
               </div>
               <div className="memory-item">
                 <div className="pie-chart swap-pie">
-                  <div className="pie-segment" style={{ transform: "rotate(0deg)", backgroundColor: "#22c55e" }}></div>
                   <div
                     className="pie-segment"
-                    style={{ transform: "rotate(216deg)", backgroundColor: "transparent" }}
+                    style={{
+                      transform: "rotate(0deg)",
+                      backgroundColor: "#22c55e"
+                    }}
+                  ></div>
+                  <div
+                    className="pie-segment"
+                    style={{
+                      transform: `rotate(${3.6 * systemStats.memoryDetails.swap.usedPercentage}deg)`,
+                      backgroundColor: "transparent"
+                    }}
                   ></div>
                 </div>
                 <div className="memory-details">
                   <div>Swap</div>
-                  <div>1.3 GB (60.1%) of 2.1 GB</div>
+                  <div>
+                    {systemStats.memoryDetails.swap.used} ({systemStats.memoryDetails.swap.usedPercentage}%)
+                    of {systemStats.memoryDetails.swap.total}
+                  </div>
                 </div>
               </div>
             </div>
@@ -144,7 +176,7 @@ function App() {
         {networkExpanded && (
           <div className="section-content">
             <div className="chart-container">
-              <NetworkChart />
+              <NetworkChart systemStats={systemStats} />
             </div>
             <div className="network-stats">
               <div className="network-item">
@@ -159,8 +191,8 @@ function App() {
                 </div>
                 <div className="network-details">
                   <div>Receiving</div>
-                  <div>0 bytes/s</div>
-                  <div>Total Received 1.2 GiB</div>
+                  <div>{formatBytes(systemStats.networkDetails.receiving)}/s</div>
+                  <div>Total Received {systemStats.networkDetails.totalReceived}</div>
                 </div>
               </div>
               <div className="network-item">
@@ -175,8 +207,8 @@ function App() {
                 </div>
                 <div className="network-details">
                   <div>Sending</div>
-                  <div>0 bytes/s</div>
-                  <div>Total Sent 155.0 MiB</div>
+                  <div>{formatBytes(systemStats.networkDetails.sending)}/s</div>
+                  <div>Total Sent {systemStats.networkDetails.totalSent}</div>
                 </div>
               </div>
             </div>
@@ -185,6 +217,39 @@ function App() {
       </div>
     </div>
   )
+}
+
+// Helper function to get color for CPU cores
+function getCpuColor(cpuId) {
+  const colors = {
+    "CPU1": "#ef4444", // red
+    "CPU2": "#f97316", // orange
+    "CPU3": "#eab308", // yellow
+    "CPU4": "#84cc16", // lime
+    "CPU5": "#ec4899", // pink
+    "CPU6": "#06b6d4", // cyan
+    "CPU7": "#3b82f6", // blue
+    "CPU8": "#6366f1", // indigo
+    "CPU9": "#9333ea", // purple
+    "CPU10": "#f472b6", // pink
+    "CPU11": "#9ca3af", // gray
+    "CPU12": "#8b5cf6", // violet
+  };
+
+  return colors[cpuId] || "#9ca3af"; // default to gray
+}
+
+// Helper function to format bytes
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return '0 B';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 export default App

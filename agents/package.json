@@ -4,15 +4,18 @@
     "description": "Lightweight server monitoring agent",
     "main": "agent.js",
     "scripts": {
-      "start": "node agent.js",
-      "install-service": "node install.js"
+        "start": "node agent.js",
+        "install-service": "node install.js"
     },
     "dependencies": {
-      "systeminformation": "^5.17.12",
-      "socket.io-client": "^4.6.1",
-      "node-os-utils": "^1.3.7"
+        "node-os-utils": "^1.3.7",
+        "socket.io-client": "^4.6.1",
+        "systeminformation": "^5.17.12"
     },
     "engines": {
-      "node": ">=14.0.0"
+        "node": ">=14.0.0"
+    },
+    "devDependencies": {
+        "node-windows": "^1.0.0-beta.8"
     }
 }

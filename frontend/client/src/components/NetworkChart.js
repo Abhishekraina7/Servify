@@ -15,63 +15,50 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-// Generate random network data
-const generateNetworkData = (count) => {
-    const receivingData = []
-    const sendingData = []
-
-    for (let i = 0; i < count; i++) {
-        // Generate values with occasional spikes
-        const baseReceiving = Math.random() * 0.2
-        const baseSending = Math.random() * 0.2
-
-        const spikeReceiving = Math.random() > 0.9 ? Math.random() * 1.5 : 0
-        const spikeSending = Math.random() > 0.9 ? Math.random() * 1.2 : 0
-
-        receivingData.push(baseReceiving + spikeReceiving)
-        sendingData.push(baseSending + spikeSending)
-    }
-
-    return { receivingData, sendingData }
+// Convert network stats to MB/s for display
+function bytesToMB(bytes) {
+    return bytes / (1024 * 1024);
 }
 
-function NetworkChart() {
+function NetworkChart({ systemStats }) {
     const [networkData, setNetworkData] = useState({
-        receivingData: [],
-        sendingData: [],
-    })
-    const [labels, setLabels] = useState([])
+        receivingData: Array(60).fill(0),
+        sendingData: Array(60).fill(0),
+    });
+    const [labels, setLabels] = useState(Array(60).fill(""));
+    // Track max value for dynamic y-axis scaling
+    const [maxDataValue, setMaxDataValue] = useState(2);
 
     useEffect(() => {
-        // Generate initial data
-        const initialLabels = Array.from({ length: 60 }, (_, i) => `${i} secs`)
-        setLabels(initialLabels)
-        setNetworkData(generateNetworkData(60))
+        if (!systemStats || !systemStats.networkDetails) {
+            return;
+        }
 
-        // Update data every second
-        const interval = setInterval(() => {
-            setNetworkData((prevData) => {
-                const newReceivingData = [...prevData.receivingData.slice(1)]
-                const newSendingData = [...prevData.sendingData.slice(1)]
+        // Convert to MB/s for display
+        const receivingMB = bytesToMB(systemStats.networkDetails.receiving);
+        const sendingMB = bytesToMB(systemStats.networkDetails.sending);
 
-                const baseReceiving = Math.random() * 0.2
-                const baseSending = Math.random() * 0.2
+        // Update dynamic scale if needed
+        const currentMax = Math.max(receivingMB, sendingMB);
+        if (currentMax > maxDataValue) {
+            // Add 20% buffer to max value
+            setMaxDataValue(currentMax * 1.2);
+        }
 
-                const spikeReceiving = Math.random() > 0.9 ? Math.random() * 1.5 : 0
-                const spikeSending = Math.random() > 0.9 ? Math.random() * 1.2 : 0
+        setNetworkData(prev => {
+            return {
+                receivingData: [...prev.receivingData.slice(1), receivingMB],
+                sendingData: [...prev.sendingData.slice(1), sendingMB],
+            };
+        });
 
-                newReceivingData.push(baseReceiving + spikeReceiving)
-                newSendingData.push(baseSending + spikeSending)
-
-                return {
-                    receivingData: newReceivingData,
-                    sendingData: newSendingData,
-                }
-            })
-        }, 1000)
-
-        return () => clearInterval(interval)
-    }, [])
+        // Update time labels
+        setLabels(prev => {
+            const now = new Date();
+            const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            return [...prev.slice(1), timeStr];
+        });
+    }, [systemStats]);
 
     const chartData = {
         labels,
@@ -116,10 +103,9 @@ function NetworkChart() {
                     color: "rgba(0, 0, 0, 0.1)",
                 },
                 min: 0,
-                max: 2,
+                max: maxDataValue,
                 ticks: {
-                    stepSize: 0.4,
-                    callback: (value) => `${value} MB/s`,
+                    callback: (value) => `${value.toFixed(2)} MB/s`,
                 },
             },
         },

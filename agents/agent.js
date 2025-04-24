@@ -9,7 +9,7 @@ const path = require('path');
 const CONFIG = {
   serverName: process.env.SERVER_NAME || os.hostname(),
   serverGroup: process.env.SERVER_GROUP || 'production',
-  backendUrl: process.env.BACKEND_URL || 'ws://localhost:3000',
+  backendUrl: process.env.BACKEND_URL || 'ws://localhost:5000',
   apiKey: process.env.API_KEY || 'default-key',
   interval: process.env.COLLECTION_INTERVAL ? parseInt(process.env.COLLECTION_INTERVAL) : 5000,
   logPath: process.env.LOG_PATH || path.join(__dirname, 'agent.log')
@@ -58,7 +58,7 @@ socket.on('reconnect', (attemptNumber) => {
 // Handle server commands
 socket.on('command', async (command) => {
   log(`Received command: ${command.type}`);
-  
+
   switch (command.type) {
     case 'collect_now':
       // Immediately collect and send metrics
@@ -180,7 +180,7 @@ async function sendMetrics() {
 function startMetricsCollection() {
   // Initial collection
   sendMetrics();
-  
+
   // Set up interval for regular collection
   setInterval(sendMetrics, CONFIG.interval);
   log(`Metrics collection started, interval: ${CONFIG.interval}ms`);
