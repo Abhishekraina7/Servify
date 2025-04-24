@@ -1,0 +1,884 @@
+2025-04-24T20:09:26.232Z - INFO - Starting monitoring backend with configuration: {"port":3000,"apiKeyCount":1,"historyInterval":5000}
+2025-04-24T20:09:26.238Z - INFO - Monitoring backend listening on port 3000
+2025-04-24T20:09:26.238Z - INFO - Dashboard namespace: :::3000/dashboard
+2025-04-24T20:09:26.238Z - INFO - Agent namespace: :::3000/agents
+2025-04-24T20:09:26.920Z - DEBUG - Authentication attempt from kush-HP-Laptop-15s-fq5xxx with key def...
+2025-04-24T20:09:26.921Z - INFO - Authentication successful for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:26.922Z - INFO - Agent connected: kush-HP-Laptop-15s-fq5xxx (group: production)
+2025-04-24T20:09:26.922Z - INFO - Initialized data stores for new server kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:26.924Z - INFO - Broadcasted status update for kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:27.361Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:27.362Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:27.362Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:27.442Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:27.443Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:32.422Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:32.423Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:32.423Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:32.488Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:32.488Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:37.460Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:37.460Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:37.460Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:37.547Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:37.547Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:42.247Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:42.247Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:42.362Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:42.363Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:47.365Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:47.365Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:47.366Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:47.442Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:47.443Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:52.384Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:52.384Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:52.384Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:52.467Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:52.467Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:56.926Z - DEBUG - Pinged agent kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:57.464Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:57.465Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:57.465Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:09:57.526Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:09:57.526Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:02.407Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:02.407Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:02.464Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:02.464Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:07.409Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:07.410Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:07.410Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:07.453Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:07.453Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:12.346Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:12.346Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:12.415Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:12.415Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:12.415Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:17.433Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:17.433Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:17.434Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:17.447Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:17.448Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:22.434Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:22.435Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:22.435Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:22.440Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:22.441Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:26.927Z - DEBUG - Pinged agent kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:27.491Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:27.492Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:27.492Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:27.515Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:27.515Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:32.520Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:32.521Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:32.521Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:32.527Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:32.527Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:37.474Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:37.474Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:37.529Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:37.530Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:37.530Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:42.533Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:42.533Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:42.533Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:42.542Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:42.543Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:47.493Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:47.494Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:47.499Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:47.499Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:52.187Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:52.187Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:52.187Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:52.237Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:52.237Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:56.927Z - DEBUG - Pinged agent kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:57.186Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:57.186Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:10:57.228Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:57.228Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:10:57.228Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:02.189Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:02.193Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:02.238Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:02.238Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:02.239Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:07.187Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:07.187Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:07.229Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:07.230Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:12.194Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:12.194Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:12.194Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:12.241Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:12.241Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:17.216Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:17.217Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:17.217Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:17.244Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:17.245Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:22.201Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:22.201Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:22.234Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:22.234Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:22.234Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:26.927Z - DEBUG - Pinged agent kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:27.243Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:27.247Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:27.247Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:27.278Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:27.278Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:32.266Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:32.266Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:32.267Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:32.274Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:32.275Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:37.275Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:37.275Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:37.275Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:37.281Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:37.282Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:42.263Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:42.263Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:42.298Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:42.298Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:42.298Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:47.368Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:47.368Z - DEBUG - Stored history point for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:47.369Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:47.381Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:47.382Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:52.237Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:52.238Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:52.240Z - DEBUG - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:52.240Z - DEBUG - Forwarded metrics from kush-HP-Laptop-15s-fq5xxx to dashboards
+2025-04-24T20:11:52.274Z - INFO - Server shutting down...
+2025-04-24T20:11:55.384Z - INFO - Initializing monitoring backend server
+2025-04-24T20:11:55.387Z - INFO - Monitoring backend listening on port 3000
+2025-04-24T20:11:55.387Z - INFO - Dashboard namespace: :::3000/dashboard
+2025-04-24T20:11:55.387Z - INFO - Agent namespace: :::3000/agents
+2025-04-24T20:11:57.761Z - INFO - Authentication successful for client BkPFG9dk0YP9g6qFAAAB
+2025-04-24T20:11:57.761Z - INFO - Agent connected: kush-HP-Laptop-15s-fq5xxx (production) with socket ID: BkPFG9dk0YP9g6qFAAAB
+2025-04-24T20:11:57.762Z - INFO - Initialized data structures for new server: kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:57.762Z - INFO - Updated status and config for server: kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:57.762Z - INFO - Broadcast status update for kush-HP-Laptop-15s-fq5xxx to all dashboards
+2025-04-24T20:11:57.772Z - INFO - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:57.772Z - DATA - Metrics from kush-HP-Laptop-15s-fq5xxx: {
+  "timestamp": 1745525517251,
+  "server": {
+    "id": "kush-HP-Laptop-15s-fq5xxx",
+    "group": "production",
+    "os": {
+      "platform": "linux",
+      "distro": "Ubuntu",
+      "release": "22.04.5 LTS",
+      "arch": "x64"
+    },
+    "uptime": 375063.14
+  },
+  "cpu": {
+    "currentLoad": 5.260504201680672,
+    "coreLoads": [
+      6.085192697768763,
+      3.8229376257545273,
+      6.313645621181263,
+      0.5988023952095809,
+      7.6767676767676765,
+      7.862903225806452,
+      5.05050505050505,
+      6.477732793522267,
+      5.040322580645161,
+      4.426559356136821,
+      4.6,
+      5.252525252525253
+    ],
+    "avgLoad": [
+      1.89,
+      2.07,
+      1.46
+    ]
+  },
+  "memory": {
+    "total": 7982583808,
+    "used": 7660118016,
+    "free": 322465792,
+    "usedPercent": 95.96038325740057
+  },
+  "disk": {
+    "io": {
+      "readIO": 6395460,
+      "writeIO": 2160357,
+      "readSpeed": 4.394726328405913,
+      "writeSpeed": 29.165001997602875
+    },
+    "filesystems": [
+      {
+        "fs": "efivarfs",
+        "type": "efivarfs",
+        "size": 262144,
+        "used": 147456,
+        "mount": "/sys/firmware/efi/efivars",
+        "usedPercent": 57.14
+      },
+      {
+        "fs": "/dev/nvme0n1p2",
+        "type": "ext4",
+        "size": 502392610816,
+        "used": 182571200512,
+        "mount": "/",
+        "usedPercent": 38.29
+      },
+      {
+        "fs": "/dev/nvme0n1p1",
+        "type": "vfat",
+        "size": 535805952,
+        "used": 6377472,
+        "mount": "/boot/efi",
+        "usedPercent": 1.19
+      }
+    ]
+  },
+  "network": [
+    {
+      "interface": "wlo1",
+      "rxBytes": 1450105000,
+      "txBytes": 188270262,
+      "rxSec": 0,
+      "txSec": 0
+    }
+  ],
+  "topProcesses": [
+    {
+      "name": "node",
+      "pid": 1611673,
+      "cpu": 0.9894348482307564,
+      "mem": 1.4
+    },
+    {
+      "name": "code",
+      "pid": 1606448,
+      "cpu": 0.8217340264967299,
+      "mem": 5.1
+    },
+    {
+      "name": "bash",
+      "pid": 1606570,
+      "cpu": 0.7714237799765219,
+      "mem": 0
+    },
+    {
+      "name": "code",
+      "pid": 1606416,
+      "cpu": 0.57018279389569,
+      "mem": 1.8
+    },
+    {
+      "name": "gnome-shell",
+      "pid": 1797,
+      "cpu": 0.5534127117222875,
+      "mem": 3.1
+    }
+  ]
+}
+2025-04-24T20:11:57.773Z - INFO - History point stored for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:57.773Z - INFO - Forwarded metrics for kush-HP-Laptop-15s-fq5xxx to all dashboards
+2025-04-24T20:11:57.773Z - INFO - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:57.773Z - DATA - Metrics from kush-HP-Laptop-15s-fq5xxx: {
+  "timestamp": 1745525517254,
+  "server": {
+    "id": "kush-HP-Laptop-15s-fq5xxx",
+    "group": "production",
+    "os": {
+      "platform": "linux",
+      "distro": "Ubuntu",
+      "release": "22.04.5 LTS",
+      "arch": "x64"
+    },
+    "uptime": 375063.12
+  },
+  "cpu": {
+    "currentLoad": 5.260504201680672,
+    "coreLoads": [
+      6.085192697768763,
+      3.8229376257545273,
+      6.313645621181263,
+      0.5988023952095809,
+      7.6767676767676765,
+      7.862903225806452,
+      5.05050505050505,
+      6.477732793522267,
+      5.040322580645161,
+      4.426559356136821,
+      4.6,
+      5.252525252525253
+    ],
+    "avgLoad": [
+      1.89,
+      2.07,
+      1.46
+    ]
+  },
+  "memory": {
+    "total": 7982583808,
+    "used": 7659712512,
+    "free": 322871296,
+    "usedPercent": 95.95530339842566
+  },
+  "disk": {
+    "io": {
+      "readIO": 6395460,
+      "writeIO": 2160357,
+      "readSpeed": 4.394726328405913,
+      "writeSpeed": 29.165001997602875
+    },
+    "filesystems": [
+      {
+        "fs": "efivarfs",
+        "type": "efivarfs",
+        "size": 262144,
+        "used": 147456,
+        "mount": "/sys/firmware/efi/efivars",
+        "usedPercent": 57.14
+      },
+      {
+        "fs": "/dev/nvme0n1p2",
+        "type": "ext4",
+        "size": 502392610816,
+        "used": 182571200512,
+        "mount": "/",
+        "usedPercent": 38.29
+      },
+      {
+        "fs": "/dev/nvme0n1p1",
+        "type": "vfat",
+        "size": 535805952,
+        "used": 6377472,
+        "mount": "/boot/efi",
+        "usedPercent": 1.19
+      }
+    ]
+  },
+  "network": [
+    {
+      "interface": "wlo1",
+      "rxBytes": 1450105000,
+      "txBytes": 188270262,
+      "rxSec": 1093.0511182108626,
+      "txSec": 2935.1038338658145
+    }
+  ],
+  "topProcesses": [
+    {
+      "name": "init",
+      "pid": 1,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "kthreadd",
+      "pid": 2,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "pool_workqueue_release",
+      "pid": 3,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "R-rcu_g",
+      "pid": 4,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "R-rcu_p",
+      "pid": 5,
+      "cpu": 0,
+      "mem": 0
+    }
+  ]
+}
+2025-04-24T20:11:57.773Z - INFO - Forwarded metrics for kush-HP-Laptop-15s-fq5xxx to all dashboards
+2025-04-24T20:11:58.022Z - INFO - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:11:58.022Z - DATA - Metrics from kush-HP-Laptop-15s-fq5xxx: {
+  "timestamp": 1745525518022,
+  "server": {
+    "id": "kush-HP-Laptop-15s-fq5xxx",
+    "group": "production",
+    "os": {
+      "platform": "linux",
+      "distro": "Ubuntu",
+      "release": "22.04.5 LTS",
+      "arch": "x64"
+    },
+    "uptime": 375063.9
+  },
+  "cpu": {
+    "currentLoad": 8.64461045891142,
+    "coreLoads": [
+      6.578947368421052,
+      3.79746835443038,
+      8.860759493670885,
+      1.2658227848101267,
+      12.987012987012985,
+      10.256410256410255,
+      10.126582278481013,
+      11.538461538461538,
+      9.090909090909092,
+      10.126582278481013,
+      10.126582278481013,
+      9.090909090909092
+    ],
+    "avgLoad": [
+      1.89,
+      2.07,
+      1.46
+    ]
+  },
+  "memory": {
+    "total": 7982583808,
+    "used": 7663591424,
+    "free": 318992384,
+    "usedPercent": 96.00389558478156
+  },
+  "disk": {
+    "io": {
+      "readIO": 6395460,
+      "writeIO": 2160412,
+      "readSpeed": 0,
+      "writeSpeed": 69.79695431472081
+    },
+    "filesystems": [
+      {
+        "fs": "efivarfs",
+        "type": "efivarfs",
+        "size": 262144,
+        "used": 147456,
+        "mount": "/sys/firmware/efi/efivars",
+        "usedPercent": 57.14
+      },
+      {
+        "fs": "/dev/nvme0n1p2",
+        "type": "ext4",
+        "size": 502392610816,
+        "used": 182571204608,
+        "mount": "/",
+        "usedPercent": 38.29
+      },
+      {
+        "fs": "/dev/nvme0n1p1",
+        "type": "vfat",
+        "size": 535805952,
+        "used": 6377472,
+        "mount": "/boot/efi",
+        "usedPercent": 1.19
+      }
+    ]
+  },
+  "network": [
+    {
+      "interface": "wlo1",
+      "rxBytes": 1450105215,
+      "txBytes": 188270793,
+      "rxSec": 281.7824377457405,
+      "txSec": 695.9370904325033
+    }
+  ],
+  "topProcesses": [
+    {
+      "name": "node",
+      "pid": 1611673,
+      "cpu": 6.1002178649237475,
+      "mem": 1.4
+    },
+    {
+      "name": "code",
+      "pid": 1606448,
+      "cpu": 0.5446623093681917,
+      "mem": 5
+    },
+    {
+      "name": "chrome",
+      "pid": 1099468,
+      "cpu": 0.4357298474945534,
+      "mem": 12.5
+    },
+    {
+      "name": "gnome-shell",
+      "pid": 1797,
+      "cpu": 0.32679738562091504,
+      "mem": 3.1
+    },
+    {
+      "name": "code",
+      "pid": 1606416,
+      "cpu": 0.32679738562091504,
+      "mem": 1.8
+    }
+  ]
+}
+2025-04-24T20:11:58.022Z - INFO - Forwarded metrics for kush-HP-Laptop-15s-fq5xxx to all dashboards
+2025-04-24T20:12:02.257Z - INFO - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:12:02.258Z - DATA - Metrics from kush-HP-Laptop-15s-fq5xxx: {
+  "timestamp": 1745525522257,
+  "server": {
+    "id": "kush-HP-Laptop-15s-fq5xxx",
+    "group": "production",
+    "os": {
+      "platform": "linux",
+      "distro": "Ubuntu",
+      "release": "22.04.5 LTS",
+      "arch": "x64"
+    },
+    "uptime": 375068.12
+  },
+  "cpu": {
+    "currentLoad": 4.8902195608782435,
+    "coreLoads": [
+      7.990314769975787,
+      1.9138755980861244,
+      6.521739130434782,
+      2.3696682464454977,
+      7.4162679425837315,
+      6.428571428571428,
+      4.5893719806763285,
+      5.727923627684964,
+      4.05727923627685,
+      4.761904761904762,
+      3.6057692307692304,
+      3.357314148681055
+    ],
+    "avgLoad": [
+      1.74,
+      2.04,
+      1.45
+    ]
+  },
+  "memory": {
+    "total": 7982583808,
+    "used": 7652892672,
+    "free": 329691136,
+    "usedPercent": 95.86986940657498
+  },
+  "disk": {
+    "io": {
+      "readIO": 6395560,
+      "writeIO": 2160416,
+      "readSpeed": 23.69106846718787,
+      "writeSpeed": 0.9476427386875148
+    },
+    "filesystems": [
+      {
+        "fs": "efivarfs",
+        "type": "efivarfs",
+        "size": 262144,
+        "used": 147456,
+        "mount": "/sys/firmware/efi/efivars",
+        "usedPercent": 57.14
+      },
+      {
+        "fs": "/dev/nvme0n1p2",
+        "type": "ext4",
+        "size": 502392610816,
+        "used": 182571208704,
+        "mount": "/",
+        "usedPercent": 38.29
+      },
+      {
+        "fs": "/dev/nvme0n1p1",
+        "type": "vfat",
+        "size": 535805952,
+        "used": 6377472,
+        "mount": "/boot/efi",
+        "usedPercent": 1.19
+      }
+    ]
+  },
+  "network": [
+    {
+      "interface": "wlo1",
+      "rxBytes": 1450105881,
+      "txBytes": 188271457,
+      "rxSec": 157.14959886739027,
+      "txSec": 156.67767815007076
+    }
+  ],
+  "topProcesses": [
+    {
+      "name": "node",
+      "pid": 1611673,
+      "cpu": 0.7739630879142687,
+      "mem": 1.4
+    },
+    {
+      "name": "code",
+      "pid": 1606448,
+      "cpu": 0.5755110140900972,
+      "mem": 5
+    },
+    {
+      "name": "gnome-shell",
+      "pid": 1797,
+      "cpu": 0.5556658067076801,
+      "mem": 3.1
+    },
+    {
+      "name": "code",
+      "pid": 1606416,
+      "cpu": 0.5556658067076801,
+      "mem": 1.8
+    },
+    {
+      "name": "containerd-shim-runc-v2",
+      "pid": 911113,
+      "cpu": 0.47628497717801155,
+      "mem": 0
+    }
+  ]
+}
+2025-04-24T20:12:02.258Z - INFO - History point stored for kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:12:02.258Z - INFO - Forwarded metrics for kush-HP-Laptop-15s-fq5xxx to all dashboards
+2025-04-24T20:12:02.263Z - INFO - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:12:02.263Z - DATA - Metrics from kush-HP-Laptop-15s-fq5xxx: {
+  "timestamp": 1745525522262,
+  "server": {
+    "id": "kush-HP-Laptop-15s-fq5xxx",
+    "group": "production",
+    "os": {
+      "platform": "linux",
+      "distro": "Ubuntu",
+      "release": "22.04.5 LTS",
+      "arch": "x64"
+    },
+    "uptime": 375068.15
+  },
+  "cpu": {
+    "currentLoad": 4.8902195608782435,
+    "coreLoads": [
+      7.990314769975787,
+      1.9138755980861244,
+      6.521739130434782,
+      2.3696682464454977,
+      7.4162679425837315,
+      6.428571428571428,
+      4.5893719806763285,
+      5.727923627684964,
+      4.05727923627685,
+      4.761904761904762,
+      3.6057692307692304,
+      3.357314148681055
+    ],
+    "avgLoad": [
+      1.74,
+      2.04,
+      1.45
+    ]
+  },
+  "memory": {
+    "total": 7982583808,
+    "used": 7654047744,
+    "free": 328536064,
+    "usedPercent": 95.88433930789743
+  },
+  "disk": {
+    "io": {
+      "readIO": 6395560,
+      "writeIO": 2160416,
+      "readSpeed": 23.69106846718787,
+      "writeSpeed": 0.9476427386875148
+    },
+    "filesystems": [
+      {
+        "fs": "efivarfs",
+        "type": "efivarfs",
+        "size": 262144,
+        "used": 147456,
+        "mount": "/sys/firmware/efi/efivars",
+        "usedPercent": 57.14
+      },
+      {
+        "fs": "/dev/nvme0n1p2",
+        "type": "ext4",
+        "size": 502392610816,
+        "used": 182571208704,
+        "mount": "/",
+        "usedPercent": 38.29
+      },
+      {
+        "fs": "/dev/nvme0n1p1",
+        "type": "vfat",
+        "size": 535805952,
+        "used": 6377472,
+        "mount": "/boot/efi",
+        "usedPercent": 1.19
+      }
+    ]
+  },
+  "network": [
+    {
+      "interface": "wlo1",
+      "rxBytes": 1450105881,
+      "txBytes": 188271457,
+      "rxSec": 0,
+      "txSec": 0
+    }
+  ],
+  "topProcesses": [
+    {
+      "name": "init",
+      "pid": 1,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "kthreadd",
+      "pid": 2,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "pool_workqueue_release",
+      "pid": 3,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "R-rcu_g",
+      "pid": 4,
+      "cpu": 0,
+      "mem": 0
+    },
+    {
+      "name": "R-rcu_p",
+      "pid": 5,
+      "cpu": 0,
+      "mem": 0
+    }
+  ]
+}
+2025-04-24T20:12:02.263Z - INFO - Forwarded metrics for kush-HP-Laptop-15s-fq5xxx to all dashboards
+2025-04-24T20:12:03.024Z - INFO - Received metrics from kush-HP-Laptop-15s-fq5xxx
+2025-04-24T20:12:03.024Z - DATA - Metrics from kush-HP-Laptop-15s-fq5xxx: {
+  "timestamp": 1745525523023,
+  "server": {
+    "id": "kush-HP-Laptop-15s-fq5xxx",
+    "group": "production",
+    "os": {
+      "platform": "linux",
+      "distro": "Ubuntu",
+      "release": "22.04.5 LTS",
+      "arch": "x64"
+    },
+    "uptime": 375068.91
+  },
+  "cpu": {
+    "currentLoad": 11.949685534591195,
+    "coreLoads": [
+      7.59493670886076,
+      7.59493670886076,
+      5.063291139240507,
+      8.75,
+      15.384615384615385,
+      14.285714285714285,
+      12.658227848101266,
+      15,
+      11.11111111111111,
+      18.51851851851852,
+      12.345679012345679,
+      15
+    ],
+    "avgLoad": [
+      1.74,
+      2.04,
+      1.45
+    ]
+  },
+  "memory": {
+    "total": 7982583808,
+    "used": 7250800640,
+    "free": 731783168,
+    "usedPercent": 90.83275308344875
+  },
+  "disk": {
+    "io": {
+      "readIO": 6395560,
+      "writeIO": 2160416,
+      "readSpeed": 0,
+      "writeSpeed": 0
+    },
+    "filesystems": [
+      {
+        "fs": "efivarfs",
+        "type": "efivarfs",
+        "size": 262144,
+        "used": 147456,
+        "mount": "/sys/firmware/efi/efivars",
+        "usedPercent": 57.14
+      },
+      {
+        "fs": "/dev/nvme0n1p2",
+        "type": "ext4",
+        "size": 502392610816,
+        "used": 182571212800,
+        "mount": "/",
+        "usedPercent": 38.29
+      },
+      {
+        "fs": "/dev/nvme0n1p1",
+        "type": "vfat",
+        "size": 535805952,
+        "used": 6377472,
+        "mount": "/boot/efi",
+        "usedPercent": 1.19
+      }
+    ]
+  },
+  "network": [
+    {
+      "interface": "wlo1",
+      "rxBytes": 1450105881,
+      "txBytes": 188271457,
+      "rxSec": 0,
+      "txSec": 0
+    }
+  ],
+  "topProcesses": [
+    {
+      "name": "node",
+      "pid": 1611673,
+      "cpu": 5.9523809523809526,
+      "mem": 1.4
+    },
+    {
+      "name": "chrome",
+      "pid": 1099468,
+      "cpu": 4.329004329004329,
+      "mem": 7.1
+    },
+    {
+      "name": "code",
+      "pid": 1606496,
+      "cpu": 0.4329004329004329,
+      "mem": 2.5
+    },
+    {
+      "name": "code",
+      "pid": 1606448,
+      "cpu": 0.3246753246753247,
+      "mem": 5
+    },
+    {
+      "name": "systemd-udevd",
+      "pid": 534,
+      "cpu": 0.21645021645021645,
+      "mem": 0
+    }
+  ]
+}
+2025-04-24T20:12:03.024Z - INFO - Forwarded metrics for kush-HP-Laptop-15s-fq5xxx to all dashboards

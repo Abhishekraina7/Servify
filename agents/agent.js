@@ -9,7 +9,7 @@ const path = require('path');
 const CONFIG = {
   serverName: process.env.SERVER_NAME || os.hostname(),
   serverGroup: process.env.SERVER_GROUP || 'production',
-  backendUrl: process.env.BACKEND_URL || 'ws://localhost:5000',
+  backendUrl: process.env.BACKEND_URL || 'ws://localhost:3000/agents', // Updated default URL
   apiKey: process.env.API_KEY || 'default-key',
   interval: process.env.COLLECTION_INTERVAL ? parseInt(process.env.COLLECTION_INTERVAL) : 5000,
   logPath: process.env.LOG_PATH || path.join(__dirname, 'agent.log')
@@ -85,7 +85,7 @@ async function collectMetrics() {
     const [cpu, mem, disks, netStats, fsSize, processes, osInfo, uptime] = await Promise.all([
       si.currentLoad(),
       si.mem(),
-      si.diskIO(),
+      si.disksIO(), // Fixed: changed from diskIO to disksIO
       si.networkStats(),
       si.fsSize(),
       si.processes(),
