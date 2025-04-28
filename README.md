@@ -115,7 +115,7 @@ npm start
 
  ### Future Developments
 
-#### Servify has a solid foundation but can be enhanced with the following features:
+#### Servify has a solid foundation but will be enhanced with the following features:
 
 
 - **Alerting System:** Add notifications (e.g., email, Slack) for critical server events like high CPU or low memory.
