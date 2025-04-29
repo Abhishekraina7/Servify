@@ -59,7 +59,7 @@ function CpuChart({ systemStats }) {
         // Update time labels
         setLabels(prev => {
             const now = new Date();
-            const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
             return [...prev.slice(1), timeStr];
         });
     }, [systemStats]);

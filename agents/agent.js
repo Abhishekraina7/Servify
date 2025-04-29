@@ -9,9 +9,9 @@ const path = require('path');
 const CONFIG = {
   serverName: process.env.SERVER_NAME || os.hostname(),
   serverGroup: process.env.SERVER_GROUP || 'production',
-  backendUrl: process.env.BACKEND_URL || 'ws://localhost:3000/agents', // Updated default URL
+  backendUrl: process.env.BACKEND_URL || 'ws://localhost:3000/agents',
   apiKey: process.env.API_KEY || 'default-key',
-  interval: process.env.COLLECTION_INTERVAL ? parseInt(process.env.COLLECTION_INTERVAL) : 5000,
+  interval: process.env.COLLECTION_INTERVAL ? parseInt(process.env.COLLECTION_INTERVAL) : 2000,
   logPath: process.env.LOG_PATH || path.join(__dirname, 'agent.log')
 };
 
@@ -82,10 +82,13 @@ socket.on('command', async (command) => {
 async function collectMetrics() {
   try {
     // Collect basic system information
-    const [cpu, mem, disks, netStats, fsSize, processes, osInfo, uptime] = await Promise.all([
+    const [cpu, mem, disksIO, netStats, fsSize, processes, osInfo, uptime] = await Promise.all([
       si.currentLoad(),
       si.mem(),
-      si.disksIO(), // Fixed: changed from diskIO to disksIO
+      si.disksIO().catch(err => {
+        log(`Error getting disks IO: ${err.message}`);
+        return null;
+      }),
       si.networkStats(),
       si.fsSize(),
       si.processes(),
@@ -113,6 +116,19 @@ async function collectMetrics() {
       txSec: n.tx_sec
     }));
 
+    // Prepare the disk IO data with null checks
+    const diskIO = disksIO ? {
+      readIO: disksIO.rIO !== undefined ? disksIO.rIO : 0,
+      writeIO: disksIO.wIO !== undefined ? disksIO.wIO : 0,
+      readSpeed: disksIO.rIO_sec !== undefined ? disksIO.rIO_sec : 0,
+      writeSpeed: disksIO.wIO_sec !== undefined ? disksIO.wIO_sec : 0
+    } : {
+      readIO: 0,
+      writeIO: 0,
+      readSpeed: 0,
+      writeSpeed: 0
+    };
+
     // Prepare the metrics payload
     return {
       timestamp: Date.now(),
@@ -139,12 +155,7 @@ async function collectMetrics() {
         usedPercent: (mem.used / mem.total) * 100
       },
       disk: {
-        io: {
-          readIO: disks.rIO,
-          writeIO: disks.wIO,
-          readSpeed: disks.rIO_sec,
-          writeSpeed: disks.wIO_sec
-        },
+        io: diskIO,
         filesystems: fsSize.map(fs => ({
           fs: fs.fs,
           type: fs.type,

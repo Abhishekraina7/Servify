@@ -34,9 +34,13 @@ function NetworkChart({ systemStats }) {
             return;
         }
 
+        // Get the network receiving and sending rates from processed stats
+        const receivingBytes = systemStats.networkDetails.receiving || 0;
+        const sendingBytes = systemStats.networkDetails.sending || 0;
+
         // Convert to MB/s for display
-        const receivingMB = bytesToMB(systemStats.networkDetails.receiving);
-        const sendingMB = bytesToMB(systemStats.networkDetails.sending);
+        const receivingMB = bytesToMB(receivingBytes);
+        const sendingMB = bytesToMB(sendingBytes);
 
         // Update dynamic scale if needed
         const currentMax = Math.max(receivingMB, sendingMB);
@@ -55,7 +59,7 @@ function NetworkChart({ systemStats }) {
         // Update time labels
         setLabels(prev => {
             const now = new Date();
-            const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            const timeStr = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
             return [...prev.slice(1), timeStr];
         });
     }, [systemStats]);

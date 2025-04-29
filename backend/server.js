@@ -62,15 +62,15 @@ function storeHistoryPoint(serverId, metrics) {
   if (!serversStore.history[serverId]) {
     serversStore.history[serverId] = [];
   }
-  
+
   // Add metrics to history with timestamp
   const historyPoint = {
     timestamp: metrics.timestamp,
     cpu: metrics.cpu.currentLoad,
     memory: metrics.memory.usedPercent,
-    disk: metrics.disk.filesystems.map(fs => ({ 
-      mount: fs.mount, 
-      usedPercent: fs.usedPercent 
+    disk: metrics.disk.filesystems.map(fs => ({
+      mount: fs.mount,
+      usedPercent: fs.usedPercent
     })),
     network: metrics.network.reduce((acc, net) => {
       acc.rxSec = (acc.rxSec || 0) + (net.rxSec || 0);
@@ -78,10 +78,10 @@ function storeHistoryPoint(serverId, metrics) {
       return acc;
     }, {})
   };
-  
+
   serversStore.history[serverId].push(historyPoint);
   log(`History point stored for ${serverId}`);
-  
+
   // Trim history if it's getting too long
   if (serversStore.history[serverId].length > MAX_HISTORY_ITEMS) {
     serversStore.history[serverId].shift();
@@ -107,55 +107,55 @@ agentNamespace.use((socket, next) => {
 agentNamespace.on('connection', (socket) => {
   const serverId = socket.handshake.auth.serverName;
   const serverGroup = socket.handshake.auth.serverGroup || 'default';
-  
+
   log(`Agent connected: ${serverId} (${serverGroup}) with socket ID: ${socket.id}`);
-  
+
   // Initialize server data if needed
   if (!serversStore.metrics[serverId]) {
     serversStore.metrics[serverId] = null;
     serversStore.history[serverId] = [];
     log(`Initialized data structures for new server: ${serverId}`);
   }
-  
+
   // Update server status
-  serversStore.status[serverId] = { 
-    connected: true, 
+  serversStore.status[serverId] = {
+    connected: true,
     lastSeen: Date.now(),
     group: serverGroup
   };
-  
+
   // Store server config if provided
   serversStore.config[serverId] = {
     group: serverGroup,
     ...serversStore.config[serverId]
   };
-  
+
   log(`Updated status and config for server: ${serverId}`);
-  
+
   // Broadcast server status to dashboards
   dashboardNamespace.emit('server_status_update', {
     serverId,
     status: serversStore.status[serverId]
   });
   log(`Broadcast status update for ${serverId} to all dashboards`);
-  
+
   // Handle metrics from agent
   socket.on('metrics', (metrics) => {
     log(`Received metrics from ${serverId}`);
     logData(`Metrics from ${serverId}`, metrics);
-    
+
     // Store latest metrics
     serversStore.metrics[serverId] = metrics;
     serversStore.status[serverId].lastSeen = Date.now();
-    
+
     // Store in history at intervals to avoid too much data
-    const lastHistoryPoint = serversStore.history[serverId]?.length > 0 ? 
+    const lastHistoryPoint = serversStore.history[serverId]?.length > 0 ?
       serversStore.history[serverId][serversStore.history[serverId].length - 1] : null;
-    
+
     if (!lastHistoryPoint || (metrics.timestamp - lastHistoryPoint.timestamp) >= CONFIG.historyInterval) {
       storeHistoryPoint(serverId, metrics);
     }
-    
+
     // Forward to dashboards
     dashboardNamespace.emit('metrics_update', {
       serverId,
@@ -163,14 +163,14 @@ agentNamespace.on('connection', (socket) => {
     });
     log(`Forwarded metrics for ${serverId} to all dashboards`);
   });
-  
+
   // Handle disconnection
   socket.on('disconnect', () => {
     log(`Agent disconnected: ${serverId}`);
     if (serversStore.status[serverId]) {
       serversStore.status[serverId].connected = false;
       serversStore.status[serverId].lastSeen = Date.now();
-      
+
       // Broadcast disconnection to dashboards
       dashboardNamespace.emit('server_status_update', {
         serverId,
@@ -179,12 +179,12 @@ agentNamespace.on('connection', (socket) => {
       log(`Broadcast disconnection of ${serverId} to all dashboards`);
     }
   });
-  
+
   // Handle errors
   socket.on('error', (error) => {
     log(`Error from agent ${serverId}: ${error}`, 'ERROR');
   });
-  
+
   // Ping agent to check if it's alive
   setInterval(() => {
     if (socket.connected) {
@@ -199,7 +199,7 @@ const dashboardNamespace = io.of('/dashboard');
 
 dashboardNamespace.on('connection', (socket) => {
   log(`Dashboard connected with socket ID: ${socket.id}`);
-  
+
   // Send initial data to the dashboard
   const initialData = {
     servers: Object.keys(serversStore.status).map(serverId => ({
@@ -209,46 +209,46 @@ dashboardNamespace.on('connection', (socket) => {
       config: serversStore.config[serverId]
     }))
   };
-  
+
   socket.emit('initial_data', initialData);
   log(`Sent initial data to dashboard ${socket.id}`);
   logData(`Initial dashboard data`, initialData);
-  
+
   // Handle dashboard commands to agents
   socket.on('command', (data) => {
     const { serverId, command } = data;
     log(`Received command for ${serverId}: ${command.type} from dashboard ${socket.id}`);
     logData(`Command details`, command);
-    
+
     // Forward command to the specific agent
     agentNamespace.to(serverId).emit('command', command);
     log(`Forwarded command to agent ${serverId}`);
   });
-  
+
   // Handle history request
   socket.on('get_history', (data) => {
     const { serverId, timeRange } = data;
     log(`History request for ${serverId} with timeRange ${timeRange} from dashboard ${socket.id}`);
-    
+
     let history = serversStore.history[serverId] || [];
-    
+
     // Filter by time range if specified
     if (timeRange) {
       const startTime = Date.now() - timeRange;
       history = history.filter(point => point.timestamp >= startTime);
       log(`Filtered history to ${history.length} points for timeRange ${timeRange}`);
     }
-    
+
     const historyData = {
       serverId,
       history
     };
-    
+
     socket.emit('history_data', historyData);
     log(`Sent history data for ${serverId} to dashboard ${socket.id}`);
     logData(`History data sample (first 2 points)`, history.slice(0, 2));
   });
-  
+
   // Handle disconnection
   socket.on('disconnect', () => {
     log(`Dashboard disconnected: ${socket.id}`);
@@ -258,13 +258,13 @@ dashboardNamespace.on('connection', (socket) => {
 // API routes
 app.get('/api/status', (req, res) => {
   log(`API request: GET /api/status from ${req.ip}`);
-  
+
   const statusData = {
     uptime: process.uptime(),
     serverCount: Object.keys(serversStore.status).length,
     connectedCount: Object.values(serversStore.status).filter(s => s.connected).length
   };
-  
+
   res.json(statusData);
   log(`Responded to status request`);
   logData(`Status response`, statusData);
@@ -273,7 +273,7 @@ app.get('/api/status', (req, res) => {
 // Get list of servers
 app.get('/api/servers', (req, res) => {
   log(`API request: GET /api/servers from ${req.ip}`);
-  
+
   const servers = Object.keys(serversStore.status).map(serverId => ({
     id: serverId,
     status: serversStore.status[serverId],
@@ -283,7 +283,7 @@ app.get('/api/servers', (req, res) => {
       uptime: serversStore.metrics[serverId].server.uptime
     } : null
   }));
-  
+
   res.json(servers);
   log(`Responded with list of ${servers.length} servers`);
   logData(`Servers list sample`, servers.slice(0, 2));
@@ -293,18 +293,18 @@ app.get('/api/servers', (req, res) => {
 app.get('/api/servers/:serverId', (req, res) => {
   const { serverId } = req.params;
   log(`API request: GET /api/servers/${serverId} from ${req.ip}`);
-  
+
   if (!serversStore.metrics[serverId]) {
     log(`Server not found or no metrics available: ${serverId}`, 'WARN');
     return res.status(404).json({ error: 'Server not found or no metrics available' });
   }
-  
+
   const serverData = {
     status: serversStore.status[serverId],
     metrics: serversStore.metrics[serverId],
     config: serversStore.config[serverId]
   };
-  
+
   res.json(serverData);
   log(`Responded with detailed metrics for server ${serverId}`);
   logData(`Server ${serverId} detailed metrics`, {
