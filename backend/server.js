@@ -43,6 +43,22 @@ const io = new Server(server, {
   }
 });
 
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+
+  // Listen for message from client
+  socket.on("client-message", (data) => {
+    console.log("Message from client:", data);
+
+    // Optional: Send a reply back to that client
+    socket.emit("server-reply", `Hello client, I received your message: ${data}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
 //serve a static HTML on the client when connection is established
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
