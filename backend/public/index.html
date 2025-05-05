@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Health Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            margin: 1rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Server Health Dashboard</h1>
+    <div class="stat">CPU Usage: <span id="cpu">--</span>%</div>
+    <div class="stat">Memory Usage: <span id="mem">--</span>%</div>
+    <div class="stat">Disk Usage: <span id="disk">--</span>%</div>
+    <div class="stat">Uptime: <span id="uptime">--</span> sec</div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const socket = io("http://192.168.1.22:5000"); // Replace with your server's IP if different
+
+        socket.on("stats", data => {
+            document.getElementById("cpu").textContent = data.cpu;
+            document.getElementById("mem").textContent = data.mem;
+            document.getElementById("disk").textContent = data.disk;
+            document.getElementById("uptime").textContent = data.uptime;
+        });
+    </script>
+</body>
+
+</html>
