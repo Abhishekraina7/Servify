@@ -43,6 +43,13 @@ const io = new Server(server, {
   }
 });
 
+//serve a static HTML on the client when connection is established
+app.use(express.static(path.join(__dirname, "public")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+
 log("Initializing monitoring backend server");
 
 // In-memory storage for server metrics
