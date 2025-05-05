@@ -315,7 +315,7 @@ app.get('/api/servers/:serverId', (req, res) => {
 });
 
 // Start the server
-server.listen(CONFIG.port, () => {
+server.listen(CONFIG.port, '0.0.0.0', () => {
   log(`Monitoring backend listening on port ${CONFIG.port}`, 'INFO');
   log(`Dashboard namespace: ${server.address().address || 'localhost'}:${CONFIG.port}/dashboard`);
   log(`Agent namespace: ${server.address().address || 'localhost'}:${CONFIG.port}/agents`);
