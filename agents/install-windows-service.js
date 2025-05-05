@@ -6,7 +6,7 @@ const path = require('path');
 const svc = new Service({
   name: 'ServerMonitoringAgent',
   description: 'Server metrics monitoring agent',
-  script: path.join('D:\\Minor Project\\agents', 'server-monitoring-agent.js'),
+  script: path.join('C:\\Server Monitoring System\\Servify\\agents', 'server-monitoring-agent.js'),
   env: {
     name: "NODE_ENV",
     value: "production"
