@@ -1,50 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Server Health Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            color: #333;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        h1 {
-            margin-bottom: 2rem;
-        }
-
-        .stat {
-            margin: 1rem auto;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-            width: 300px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <title>Client-Server Test</title>
 </head>
 
 <body>
-    <h1>Server Health Dashboard</h1>
-    <div class="stat">CPU Usage: <span id="cpu">--</span>%</div>
-    <div class="stat">Memory Usage: <span id="mem">--</span>%</div>
-    <div class="stat">Disk Usage: <span id="disk">--</span>%</div>
-    <div class="stat">Uptime: <span id="uptime">--</span> sec</div>
+    <h1>Client-Server Connected!</h1>
+    <p id="reply">Waiting for server reply...</p>
 
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io("http://192.168.1.22:5000"); // Replace with your server's IP if different
+        const socket = io();
 
-        socket.on("stats", data => {
-            document.getElementById("cpu").textContent = data.cpu;
-            document.getElementById("mem").textContent = data.mem;
-            document.getElementById("disk").textContent = data.disk;
-            document.getElementById("uptime").textContent = data.uptime;
+        // Send message to server
+        socket.emit("client-message", "Hello server! This is client.");
+
+        // Listen for server reply
+        socket.on("server-reply", (msg) => {
+            console.log("Server says:", msg);
+            document.getElementById("reply").innerText = msg;
         });
     </script>
 </body>
