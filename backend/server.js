@@ -19,7 +19,24 @@ const CONFIG = {
   apiKeys: process.env.API_KEYS ? process.env.API_KEYS.split(',') : ['default-key'],
   port: process.env.PORT || 3000,
   historyInterval: 5000, // ms between history points (to avoid storing too much data)
-  logPath: process.env.LOG_PATH || path.join(__dirname, 'backend.log')
+  logPath: process.env.LOG_PATH || path.join(__dirname, 'backend.log'),
+  alerts: {
+    cpu: {
+      high: 90,    // CPU usage above 90% = high alert
+      medium: 75,  // CPU usage above 75% = medium alert
+      low: 60      // CPU usage above 60% = low alert
+    },
+    memory: {
+      high: 85,    // Memory usage above 85% = high alert
+      medium: 70,  // Memory usage above 70% = medium alert
+      low: 60      // Memory usage above 60% = low alert
+    },
+    disk: {
+      high: 90,    // Disk usage above 90% = high alert
+      medium: 80,  // Disk usage above 80% = medium alert
+      low: 70      // Disk usage above 70% = low alert
+    }
+  }
 };
 
 // Logging function
@@ -65,20 +82,225 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-
 log("Initializing monitoring backend server");
 
 // In-memory storage for server metrics
-// For MVP, we'll just keep the latest metrics in memory
 const serversStore = {
   metrics: {}, // Latest metrics for each server
   status: {},  // Connected/disconnected status
   history: {}, // Recent history (last hour) - rolling window
-  config: {}   // Server configurations
+  config: {},  // Server configurations
+  alerts: {}   // Active alerts for each server
 };
 
 // Maximum history items to keep per server (12 items per minute × 60 minutes = 720 items)
 const MAX_HISTORY_ITEMS = 720;
+
+// Alert generation and management
+function generateAlerts(serverId, metrics) {
+  const currentAlerts = [];
+  const timestamp = Date.now();
+
+  // Check CPU alerts
+  const cpuUsage = metrics.cpu.currentLoad;
+  if (cpuUsage >= CONFIG.alerts.cpu.high) {
+    currentAlerts.push({
+      id: `${serverId}-cpu-${timestamp}`,
+      serverId,
+      type: 'cpu',
+      severity: 'high',
+      message: `Server CPU usage at ${cpuUsage.toFixed(1)}% (Critical threshold: ${CONFIG.alerts.cpu.high}%)`,
+      value: cpuUsage,
+      threshold: CONFIG.alerts.cpu.high,
+      timestamp,
+      acknowledged: false
+    });
+  } else if (cpuUsage >= CONFIG.alerts.cpu.medium) {
+    currentAlerts.push({
+      id: `${serverId}-cpu-${timestamp}`,
+      serverId,
+      type: 'cpu',
+      severity: 'medium',
+      message: `Server CPU usage at ${cpuUsage.toFixed(1)}% (Warning threshold: ${CONFIG.alerts.cpu.medium}%)`,
+      value: cpuUsage,
+      threshold: CONFIG.alerts.cpu.medium,
+      timestamp,
+      acknowledged: false
+    });
+  } else if (cpuUsage >= CONFIG.alerts.cpu.low) {
+    currentAlerts.push({
+      id: `${serverId}-cpu-${timestamp}`,
+      serverId,
+      type: 'cpu',
+      severity: 'low',
+      message: `Server CPU usage at ${cpuUsage.toFixed(1)}% (Info threshold: ${CONFIG.alerts.cpu.low}%)`,
+      value: cpuUsage,
+      threshold: CONFIG.alerts.cpu.low,
+      timestamp,
+      acknowledged: false
+    });
+  }
+
+  // Check Memory alerts
+  const memoryUsage = metrics.memory.usedPercent;
+  if (memoryUsage >= CONFIG.alerts.memory.high) {
+    currentAlerts.push({
+      id: `${serverId}-memory-${timestamp}`,
+      serverId,
+      type: 'memory',
+      severity: 'high',
+      message: `Server memory usage at ${memoryUsage.toFixed(1)}% (Critical threshold: ${CONFIG.alerts.memory.high}%)`,
+      value: memoryUsage,
+      threshold: CONFIG.alerts.memory.high,
+      timestamp,
+      acknowledged: false
+    });
+  } else if (memoryUsage >= CONFIG.alerts.memory.medium) {
+    currentAlerts.push({
+      id: `${serverId}-memory-${timestamp}`,
+      serverId,
+      type: 'memory',
+      severity: 'medium',
+      message: `Server memory usage at ${memoryUsage.toFixed(1)}% (Warning threshold: ${CONFIG.alerts.memory.medium}%)`,
+      value: memoryUsage,
+      threshold: CONFIG.alerts.memory.medium,
+      timestamp,
+      acknowledged: false
+    });
+  } else if (memoryUsage >= CONFIG.alerts.memory.low) {
+    currentAlerts.push({
+      id: `${serverId}-memory-${timestamp}`,
+      serverId,
+      type: 'memory',
+      severity: 'low',
+      message: `Server memory usage at ${memoryUsage.toFixed(1)}% (Info threshold: ${CONFIG.alerts.memory.low}%)`,
+      value: memoryUsage,
+      threshold: CONFIG.alerts.memory.low,
+      timestamp,
+      acknowledged: false
+    });
+  }
+
+  // Check Disk alerts
+  if (metrics.disk && metrics.disk.filesystems) {
+    metrics.disk.filesystems.forEach((filesystem, index) => {
+      const diskUsage = filesystem.usedPercent;
+      if (diskUsage >= CONFIG.alerts.disk.high) {
+        currentAlerts.push({
+          id: `${serverId}-disk-${filesystem.mount}-${timestamp}`,
+          serverId,
+          type: 'disk',
+          severity: 'high',
+          message: `Disk usage on ${filesystem.mount} at ${diskUsage.toFixed(1)}% (Critical threshold: ${CONFIG.alerts.disk.high}%)`,
+          value: diskUsage,
+          threshold: CONFIG.alerts.disk.high,
+          mount: filesystem.mount,
+          timestamp,
+          acknowledged: false
+        });
+      } else if (diskUsage >= CONFIG.alerts.disk.medium) {
+        currentAlerts.push({
+          id: `${serverId}-disk-${filesystem.mount}-${timestamp}`,
+          serverId,
+          type: 'disk',
+          severity: 'medium',
+          message: `Disk usage on ${filesystem.mount} at ${diskUsage.toFixed(1)}% (Warning threshold: ${CONFIG.alerts.disk.medium}%)`,
+          value: diskUsage,
+          threshold: CONFIG.alerts.disk.medium,
+          mount: filesystem.mount,
+          timestamp,
+          acknowledged: false
+        });
+      } else if (diskUsage >= CONFIG.alerts.disk.low) {
+        currentAlerts.push({
+          id: `${serverId}-disk-${filesystem.mount}-${timestamp}`,
+          serverId,
+          type: 'disk',
+          severity: 'low',
+          message: `Disk usage on ${filesystem.mount} at ${diskUsage.toFixed(1)}% (Info threshold: ${CONFIG.alerts.disk.low}%)`,
+          value: diskUsage,
+          threshold: CONFIG.alerts.disk.low,
+          mount: filesystem.mount,
+          timestamp,
+          acknowledged: false
+        });
+      }
+    });
+  }
+
+  return currentAlerts;
+}
+
+// Update server alerts
+function updateServerAlerts(serverId, newAlerts) {
+  if (!serversStore.alerts[serverId]) {
+    serversStore.alerts[serverId] = [];
+  }
+
+  // Remove old alerts of the same type (to avoid duplicates)
+  const alertTypes = new Set(newAlerts.map(alert => `${alert.type}-${alert.mount || ''}`));
+  serversStore.alerts[serverId] = serversStore.alerts[serverId].filter(alert =>
+    !alertTypes.has(`${alert.type}-${alert.mount || ''}`) || alert.acknowledged
+  );
+
+  // Add new alerts
+  serversStore.alerts[serverId].push(...newAlerts);
+
+  // Log new alerts
+  if (newAlerts.length > 0) {
+    log(`Generated ${newAlerts.length} alerts for server ${serverId}`);
+    newAlerts.forEach(alert => {
+      log(`Alert [${alert.severity.toUpperCase()}] ${serverId}: ${alert.message}`, 'ALERT');
+    });
+  }
+
+  return serversStore.alerts[serverId];
+}
+
+// Get all active alerts across all servers
+function getAllActiveAlerts() {
+  const allAlerts = [];
+  Object.keys(serversStore.alerts).forEach(serverId => {
+    const serverAlerts = serversStore.alerts[serverId] || [];
+    serverAlerts.forEach(alert => {
+      if (!alert.acknowledged) {
+        allAlerts.push({
+          ...alert,
+          server: serverId,
+          timeAgo: getTimeAgo(alert.timestamp)
+        });
+      }
+    });
+  });
+
+  // Sort by severity (high -> medium -> low) and then by timestamp (newest first)
+  const severityOrder = { high: 3, medium: 2, low: 1 };
+  return allAlerts.sort((a, b) => {
+    if (severityOrder[a.severity] !== severityOrder[b.severity]) {
+      return severityOrder[b.severity] - severityOrder[a.severity];
+    }
+    return b.timestamp - a.timestamp;
+  });
+}
+
+// Helper function to get time ago string
+function getTimeAgo(timestamp) {
+  const now = Date.now();
+  const diffMs = now - timestamp;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffDays > 0) {
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  } else if (diffHours > 0) {
+    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  } else if (diffMins > 0) {
+    return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+  } else {
+    return 'Just now';
+  }
+}
 
 // Store a history point for a server
 function storeHistoryPoint(serverId, metrics) {
@@ -137,6 +359,7 @@ agentNamespace.on('connection', (socket) => {
   if (!serversStore.metrics[serverId]) {
     serversStore.metrics[serverId] = null;
     serversStore.history[serverId] = [];
+    serversStore.alerts[serverId] = [];
     log(`Initialized data structures for new server: ${serverId}`);
   }
 
@@ -171,6 +394,10 @@ agentNamespace.on('connection', (socket) => {
     serversStore.metrics[serverId] = metrics;
     serversStore.status[serverId].lastSeen = Date.now();
 
+    // Generate and update alerts based on metrics
+    const newAlerts = generateAlerts(serverId, metrics);
+    const allServerAlerts = updateServerAlerts(serverId, newAlerts);
+
     // Store in history at intervals to avoid too much data
     const lastHistoryPoint = serversStore.history[serverId]?.length > 0 ?
       serversStore.history[serverId][serversStore.history[serverId].length - 1] : null;
@@ -179,12 +406,23 @@ agentNamespace.on('connection', (socket) => {
       storeHistoryPoint(serverId, metrics);
     }
 
-    // Forward to dashboards
+    // Forward to dashboards with alerts
     dashboardNamespace.emit('metrics_update', {
       serverId,
-      metrics
+      metrics,
+      alerts: allServerAlerts
     });
     log(`Forwarded metrics for ${serverId} to all dashboards`);
+
+    // Send alerts update specifically
+    if (newAlerts.length > 0) {
+      dashboardNamespace.emit('alerts_update', {
+        serverId,
+        alerts: newAlerts,
+        allAlerts: getAllActiveAlerts()
+      });
+      log(`Sent ${newAlerts.length} new alerts for ${serverId} to all dashboards`);
+    }
   });
 
   // Handle disconnection
@@ -229,8 +467,10 @@ dashboardNamespace.on('connection', (socket) => {
       id: serverId,
       status: serversStore.status[serverId],
       metrics: serversStore.metrics[serverId],
-      config: serversStore.config[serverId]
-    }))
+      config: serversStore.config[serverId],
+      alerts: serversStore.alerts[serverId] || []
+    })),
+    allAlerts: getAllActiveAlerts()
   };
 
   socket.emit('initial_data', initialData);
@@ -246,6 +486,28 @@ dashboardNamespace.on('connection', (socket) => {
     // Forward command to the specific agent
     agentNamespace.to(serverId).emit('command', command);
     log(`Forwarded command to agent ${serverId}`);
+  });
+
+  // Handle alert acknowledgment
+  socket.on('acknowledge_alert', (data) => {
+    const { alertId, serverId } = data;
+    log(`Alert acknowledgment request: ${alertId} for server ${serverId}`);
+
+    if (serversStore.alerts[serverId]) {
+      const alert = serversStore.alerts[serverId].find(a => a.id === alertId);
+      if (alert) {
+        alert.acknowledged = true;
+        alert.acknowledgedAt = Date.now();
+        log(`Alert ${alertId} acknowledged for server ${serverId}`);
+
+        // Broadcast alert update
+        dashboardNamespace.emit('alert_acknowledged', {
+          alertId,
+          serverId,
+          allAlerts: getAllActiveAlerts()
+        });
+      }
+    }
   });
 
   // Handle history request
@@ -285,7 +547,8 @@ app.get('/api/status', (req, res) => {
   const statusData = {
     uptime: process.uptime(),
     serverCount: Object.keys(serversStore.status).length,
-    connectedCount: Object.values(serversStore.status).filter(s => s.connected).length
+    connectedCount: Object.values(serversStore.status).filter(s => s.connected).length,
+    totalAlerts: getAllActiveAlerts().length
   };
 
   res.json(statusData);
@@ -304,12 +567,26 @@ app.get('/api/servers', (req, res) => {
       cpu: serversStore.metrics[serverId].cpu.currentLoad,
       memory: serversStore.metrics[serverId].memory.usedPercent,
       uptime: serversStore.metrics[serverId].server.uptime
-    } : null
+    } : null,
+    alertCount: (serversStore.alerts[serverId] || []).filter(a => !a.acknowledged).length
   }));
 
   res.json(servers);
   log(`Responded with list of ${servers.length} servers`);
   logData(`Servers list sample`, servers.slice(0, 2));
+});
+
+// Get all active alerts
+app.get('/api/alerts', (req, res) => {
+  log(`API request: GET /api/alerts from ${req.ip}`);
+
+  const alerts = getAllActiveAlerts();
+
+  res.json({
+    total: alerts.length,
+    alerts: alerts
+  });
+  log(`Responded with ${alerts.length} active alerts`);
 });
 
 // Get detailed metrics for a specific server
@@ -325,7 +602,8 @@ app.get('/api/servers/:serverId', (req, res) => {
   const serverData = {
     status: serversStore.status[serverId],
     metrics: serversStore.metrics[serverId],
-    config: serversStore.config[serverId]
+    config: serversStore.config[serverId],
+    alerts: serversStore.alerts[serverId] || []
   };
 
   res.json(serverData);
@@ -333,8 +611,24 @@ app.get('/api/servers/:serverId', (req, res) => {
   logData(`Server ${serverId} detailed metrics`, {
     cpu: serverData.metrics.cpu.currentLoad,
     memory: serverData.metrics.memory.usedPercent,
-    uptime: serverData.metrics.server.uptime
+    uptime: serverData.metrics.server.uptime,
+    alertCount: serverData.alerts.filter(a => !a.acknowledged).length
   });
+});
+
+// Add this to your existing API routes
+app.post('/api/alerts/:id/acknowledge', (req, res) => {
+  const alertId = req.params.id;
+  // Update the alert status in your alerts store
+  Object.keys(serversStore.alerts).forEach(serverId => {
+    serversStore.alerts[serverId] = serversStore.alerts[serverId].map(alert => {
+      if (alert.id === alertId) {
+        return { ...alert, acknowledged: true };
+      }
+      return alert;
+    });
+  });
+  res.json({ success: true });
 });
 
 // Start the server and listen on all port

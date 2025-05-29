@@ -3,35 +3,103 @@
 import { useState, useEffect } from "react"
 import { Bell, User, X, Settings, LogOut, HelpCircle, Shield } from "lucide-react"
 import "./Navbar.css"
+import io from 'socket.io-client'
 
 function Navbar() {
     const [alertsOpen, setAlertsOpen] = useState(false)
     const [profileOpen, setProfileOpen] = useState(false)
+    const [alerts, setAlerts] = useState([])
+    const [socket, setSocket] = useState(null)
 
-    // Sample alerts data
-    const [alerts, setAlerts] = useState([
-        {
-            id: 1,
-            severity: "high",
-            message: "Server CPU usage above 90% for 5 minutes",
-            time: "10 minutes ago",
-            server: "server-01",
-        },
-        {
-            id: 2,
-            severity: "medium",
-            message: "Memory usage trending upward",
-            time: "25 minutes ago",
-            server: "server-02",
-        },
-        {
-            id: 3,
-            severity: "low",
-            message: "Network latency increased by 15%",
-            time: "1 hour ago",
-            server: "server-03",
-        },
-    ])
+    // Connect to WebSocket when component mounts
+    useEffect(() => {
+        // Connect to the /dashboard namespace
+        const newSocket = io('http://localhost:5000/dashboard')
+        setSocket(newSocket)
+
+        // Listen for initial data (includes all current alerts)
+        newSocket.on('initial_data', (data) => {
+            console.log("Received initial data:", data);
+            if (data && data.allAlerts) {
+                setAlerts(data.allAlerts);
+            }
+        });
+
+        // Listen for real-time alerts updates
+        newSocket.on('alerts_update', (data) => {
+            console.log("Received alerts update:", data);
+            if (data && data.allAlerts) {
+                // The backend sends the full list of active alerts with each update
+                setAlerts(data.allAlerts);
+                console.log("Updated alerts state:", data.allAlerts);
+            }
+        });
+
+        // Optional: Listen for alert acknowledgments from the server
+        newSocket.on('alert_acknowledged', (data) => {
+            console.log("Alert acknowledged by server:", data);
+            if (data && data.allAlerts) {
+                // Update the list with the new acknowledged status
+                setAlerts(data.allAlerts);
+            }
+        });
+
+        // Add basic connection logging
+        newSocket.on('connect', () => {
+            console.log('Connected to dashboard namespace');
+        });
+
+        newSocket.on('disconnect', () => {
+            console.log('Disconnected from dashboard namespace');
+        });
+
+        newSocket.on('connect_error', (error) => {
+            console.error('Dashboard socket connection error:', error);
+        });
+
+        return () => newSocket.close()
+    }, [])
+
+    // Function to fetch alerts from the API (Keep this for the refresh button)
+    const fetchAlerts = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/alerts')
+            const data = await response.json()
+            console.log("Fetched alerts via API:", data.alerts);
+            setAlerts(data.alerts)
+        } catch (error) {
+            console.error('Error fetching alerts:', error)
+        }
+    }
+
+    // Handle alert acknowledgment
+    const dismissAlert = async (id) => {
+        try {
+            // Emit the acknowledge_alert event to the server
+            if (socket) {
+                // Find the serverId for the alert to send with the event
+                const alertToDismiss = alerts.find(alert => alert.id === id);
+                if (alertToDismiss) {
+                    socket.emit('acknowledge_alert', { alertId: id, serverId: alertToDismiss.serverId });
+                    console.log(`Emitted acknowledge_alert for ${id}`);
+                    // Optimistically remove the alert from the UI
+                    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== id));
+                } else {
+                    console.warn(`Alert with id ${id} not found in current state.`);
+                }
+            } else {
+                console.error("Socket not connected, cannot dismiss alert.");
+                // Fallback to API if socket is not available (less ideal)
+                await fetch(`http://localhost:5000/api/alerts/${id}/acknowledge`, {
+                    method: 'POST'
+                });
+                setAlerts(alerts.filter(alert => alert.id !== id));
+            }
+
+        } catch (error) {
+            console.error('Error acknowledging alert:', error)
+        }
+    }
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -49,11 +117,6 @@ function Navbar() {
             document.removeEventListener("mousedown", handleClickOutside)
         }
     }, [alertsOpen, profileOpen])
-
-    // Handle alert dismissal
-    const dismissAlert = (id) => {
-        setAlerts(alerts.filter((alert) => alert.id !== id))
-    }
 
     return (
         <nav className="navbar">
@@ -75,7 +138,10 @@ function Navbar() {
                             aria-label="Alerts"
                         >
                             <Bell size={20} />
-                            {alerts.length > 0 && <span className="badge">{alerts.length}</span>}
+                            {/* Only show badge for unacknowledged alerts */}
+                            {alerts.filter(alert => !alert.acknowledged).length > 0 &&
+                                <span className="badge">{alerts.filter(alert => !alert.acknowledged).length}</span>
+                            }
                         </button>
 
                         {alertsOpen && (
@@ -87,14 +153,17 @@ function Navbar() {
                                     </button>
                                 </div>
                                 <div className="dropdown-content">
-                                    {alerts.length > 0 ? (
+                                    {/* Filter to show only unacknowledged alerts in the dropdown */}
+                                    {alerts.filter(alert => !alert.acknowledged).length > 0 ? (
                                         <ul className="alert-list">
-                                            {alerts.map((alert) => (
+                                            {alerts.filter(alert => !alert.acknowledged).map((alert) => (
                                                 <li key={alert.id} className={`alert-item ${alert.severity}`}>
                                                     <div className="alert-content">
                                                         <div className="alert-header">
-                                                            <span className={`alert-severity ${alert.severity}`}>{alert.severity}</span>
-                                                            <span className="alert-server">{alert.server}</span>
+                                                            <span className={`alert-severity ${alert.severity}`}>
+                                                                {alert.severity}
+                                                            </span>
+                                                            <span className="alert-server">{alert.serverId}</span>
                                                             <button
                                                                 className="alert-dismiss"
                                                                 onClick={() => dismissAlert(alert.id)}
@@ -104,17 +173,18 @@ function Navbar() {
                                                             </button>
                                                         </div>
                                                         <p className="alert-message">{alert.message}</p>
-                                                        <span className="alert-time">{alert.time}</span>
+                                                        {/* Display time ago if available, otherwise timestamp */}
+                                                        <span className="alert-time">{alert.timeAgo || new Date(alert.timestamp).toLocaleString()}</span>
                                                     </div>
                                                 </li>
                                             ))}
                                         </ul>
                                     ) : (
-                                        <p className="empty-message">No alerts at this time</p>
+                                        <p className="empty-message">No active alerts at this time</p>
                                     )}
                                 </div>
                                 <div className="dropdown-footer">
-                                    <button className="view-all">View all alerts</button>
+                                    <button className="view-all" onClick={fetchAlerts}>Refresh alerts</button>
                                 </div>
                             </div>
                         )}
