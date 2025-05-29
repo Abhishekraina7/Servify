@@ -13,14 +13,6 @@ Built with modern technologies like Node.js and React, Servify aims to simplify 
 - agents/: A Node.js-based agent that runs on servers to collect metrics and send them to the backend.
 - backend/: A Node.js server (likely using Express) that processes agent data and provides APIs for the frontend.
 - frontend/: A React-based web application with components for rendering CPU, memory, and network charts.
-  
-# How to Set Up Locally
-### Follow these steps to set up and run Servify on your local machine. Ensure you have Node.js (v14 or higher) and npm installed.
-**Prerequisites**
-- Node.js (v14 or higher)
-- npm
-- Git
-- A server environment to run the agent (e.g., Linux, Windows, or macOS)
 
 ### Sneak peak into the project
 
@@ -39,7 +31,14 @@ Built with modern technologies like Node.js and React, Servify aims to simplify 
 - Live metrics analytics tabs [Network analysis tab below]:
 
 ![image](https://github.com/user-attachments/assets/092d3596-7759-4454-8812-71c825e39be2)
-
+  
+# How to Set Up Locally
+### Follow these steps to set up and run Servify on your local machine. Ensure you have Node.js (v14 or higher) and npm installed.
+**Prerequisites**
+- Node.js (v14 or higher)
+- npm
+- Git
+- A server environment to run the agent (e.g., Linux, Windows, or macOS)
 
 ### Setup Instructions
 
