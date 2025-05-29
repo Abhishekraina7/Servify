@@ -22,6 +22,25 @@ Built with modern technologies like Node.js and React, Servify aims to simplify 
 - Git
 - A server environment to run the agent (e.g., Linux, Windows, or macOS)
 
+### Sneak peak into the project
+
+**Overview of the project:**
+
+![Screenshot 2025-05-29 160746](https://github.com/user-attachments/assets/56d20c20-a4a6-403b-acdf-7f65e372c037)
+
+- Alert System for automatic alerts:
+
+![image](https://github.com/user-attachments/assets/d2be92dd-043e-4841-9a5e-de4a2a80e40f)
+
+- AI assistant for easy maintanance and optimization:
+
+![image](https://github.com/user-attachments/assets/e98448d8-f3f3-4ffa-b3c8-29b5af41425d)
+
+- Live metrics analytics tabs [Network analysis tab below]:
+
+![image](https://github.com/user-attachments/assets/092d3596-7759-4454-8812-71c825e39be2)
+
+
 ### Setup Instructions
 
 #### 1. Clone the Repository
@@ -119,8 +138,11 @@ npm start
 
 
 - **Alerting System:** Add notifications (e.g., email, Slack) for critical server events like high CPU or low memory.
-
+- ![Screenshot 2025-05-29 160213](https://github.com/user-attachments/assets/ac1e34d1-fbf4-435f-9350-f20a18f5822c)
+![image](https://github.com/user-attachments/assets/385453fd-2bdb-45f1-8890-5b8de8a74015)
 - **Multi-Server Support:** Extend the agent and backend to monitor multiple servers simultaneously.
+![Screenshot 2025-05-29 160203](https://github.com/user-attachments/assets/1c473e5a-5157-4c07-b9f2-ae65c67a746e)
+![Screenshot 2025-05-29 160152](https://github.com/user-attachments/assets/55e70697-e055-4822-b852-1cf003844e17)
 
 - **Historical Data Analysis:** Store metrics in a database (e.g., MongoDB, PostgreSQL) for trend analysis and historical reporting.
 
