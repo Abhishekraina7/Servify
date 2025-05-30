@@ -1,10 +1,10 @@
-// monitoring-backend.js
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // Initialize Express app
 const app = express();
@@ -36,8 +36,11 @@ const CONFIG = {
       medium: 80,  // Disk usage above 80% = medium alert
       low: 70      // Disk usage above 70% = low alert
     }
-  }
+  },
+  geminiApiKey: ""
 };
+
+const genAI = new GoogleGenerativeAI(CONFIG.geminiApiKey);
 
 // Logging function
 function log(message, level = 'INFO') {
@@ -49,7 +52,7 @@ function log(message, level = 'INFO') {
 
 // Log important data
 function logData(context, data) {
-  log(`${context}: ${JSON.stringify(data, null, 2)}`, 'DATA');
+  // log(`${context}: ${JSON.stringify(data, null, 2)}`, 'DATA');
 }
 
 // Initialize Socket.IO
@@ -636,4 +639,133 @@ server.listen(CONFIG.port, '0.0.0.0', () => {
   log(`Monitoring backend listening on port ${CONFIG.port}`, 'INFO');
   log(`Dashboard namespace: ${server.address().address || 'localhost'}:${CONFIG.port}/dashboard`);
   log(`Agent namespace: ${server.address().address || 'localhost'}:${CONFIG.port}/agents`);
+});
+
+
+// Helper function to get server context for AI
+function getServerContext() {
+  const serverSummary = Object.keys(serversStore.status).map(serverId => {
+    const status = serversStore.status[serverId];
+    const metrics = serversStore.metrics[serverId];
+    
+    return {
+      serverId,
+      connected: status.connected,
+      group: status.group,
+      lastSeen: status.lastSeen,
+      metrics: metrics ? {
+        cpu: Math.round(metrics.cpu.currentLoad),
+        memory: Math.round(metrics.memory.usedPercent),
+        uptime: Math.round(metrics.server.uptime / 3600), // hours
+        diskUsage: metrics.disk.filesystems.map(fs => ({
+          mount: fs.mount,
+          used: Math.round(fs.usedPercent)
+        }))
+      } : null
+    };
+  });
+
+  return {
+    totalServers: serverSummary.length,
+    connectedServers: serverSummary.filter(s => s.connected).length,
+    servers: serverSummary
+  };
+}
+
+// AI Chat endpoint
+app.post('/api/ai-chat', async (req, res) => {
+  try {
+    const { message, conversationHistory = [] } = req.body;
+    
+    log(`AI Chat request from ${req.ip}: ${message}`);
+
+    if (!CONFIG.geminiApiKey) {
+      log('Gemini API key not configured', 'ERROR');
+      return res.status(500).json({ 
+        error: 'AI service not configured. Please set GEMINI_API_KEY environment variable.' 
+      });
+    }
+
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Message is required and must be a string' });
+    }
+
+    // Get current server context
+    const serverContext = getServerContext();
+    
+    // Create the model
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    // Build conversation context
+    const systemPrompt = `You are an AI assistant for a server monitoring system. You help users understand their server metrics, diagnose issues, and provide recommendations.
+
+Current server status:
+- Total servers: ${serverContext.totalServers}
+- Connected servers: ${serverContext.connectedServers}
+- Disconnected servers: ${serverContext.totalServers - serverContext.connectedServers}
+
+Server details:${serverContext.servers.map(server => `
+- ${server.serverId} (${server.group || 'default'} group):
+  - Status: ${server.connected ? 'Connected' : 'Disconnected'}
+  - Last seen: ${server.connected ? 'Now' : new Date(server.lastSeen).toLocaleString()}${server.metrics ? `
+  - CPU: ${server.metrics.cpu}%
+  - Memory: ${server.metrics.memory}%
+  - Uptime: ${server.metrics.uptime} hours
+  - Disk usage: ${server.metrics.diskUsage.map(d => `${d.mount}: ${d.used}%`).join(', ')}` : '  - No metrics available'}
+`).join('')}
+
+Guidelines:
+- Be helpful and concise
+- Focus on server monitoring and infrastructure topics
+- Provide actionable insights when possible
+- If asked about specific servers, reference the current data above
+- If metrics look concerning (CPU >80%, Memory >85%, Disk >90%), mention it
+- Keep responses conversational but professional`;
+
+    // Build chat history for context
+    let chatHistory = systemPrompt + '\n\nConversation:\n';
+    
+    // Add previous messages if provided
+    conversationHistory.slice(-10).forEach(msg => { // Keep last 10 messages for context
+      chatHistory += `${msg.type === 'user' ? 'User' : 'Assistant'}: ${msg.content}\n`;
+    });
+    
+    chatHistory += `User: ${message}\nAssistant:`;
+
+    // Generate response
+    const result = await model.generateContent(chatHistory);
+    const response = await result.response;
+    const aiResponse = response.text();
+
+    log(`AI response generated successfully`);
+    
+    res.json({ 
+      response: aiResponse,
+      timestamp: Date.now()
+    });
+
+  } catch (error) {
+    log(`AI Chat error: ${error.message}`, 'ERROR');
+    
+    // Handle specific Gemini API errors
+    if (error.message.includes('API_KEY_INVALID')) {
+      return res.status(401).json({ error: 'Invalid Gemini API key' });
+    } else if (error.message.includes('QUOTA_EXCEEDED')) {
+      return res.status(429).json({ error: 'API quota exceeded. Please try again later.' });
+    } else if (error.message.includes('SAFETY')) {
+      return res.status(400).json({ error: 'Message was blocked by safety filters. Please rephrase your question.' });
+    }
+    
+    res.status(500).json({ 
+      error: 'Failed to generate AI response. Please try again.' 
+    });
+  }
+});
+
+// Optional: Health check endpoint for AI service
+app.get('/api/ai-status', (req, res) => {
+  res.json({
+    geminiConfigured: !!CONFIG.geminiApiKey,
+    serverContext: getServerContext()
+  });
 });
