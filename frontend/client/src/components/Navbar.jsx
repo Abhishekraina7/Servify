@@ -14,7 +14,7 @@ function Navbar() {
     // Connect to WebSocket when component mounts
     useEffect(() => {
         // Connect to the /dashboard namespace
-        const newSocket = io('http://localhost:5000/dashboard')
+        const newSocket = io('http://localhost:3000/dashboard')
         setSocket(newSocket)
 
         // Listen for initial data (includes all current alerts)
@@ -63,7 +63,7 @@ function Navbar() {
     // Function to fetch alerts from the API (Keep this for the refresh button)
     const fetchAlerts = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/alerts')
+            const response = await fetch('http://localhost:3000/api/alerts')
             const data = await response.json()
             console.log("Fetched alerts via API:", data.alerts);
             setAlerts(data.alerts)
@@ -90,7 +90,7 @@ function Navbar() {
             } else {
                 console.error("Socket not connected, cannot dismiss alert.");
                 // Fallback to API if socket is not available (less ideal)
-                await fetch(`http://localhost:5000/api/alerts/${id}/acknowledge`, {
+                await fetch(`http://localhost:3000/api/alerts/${id}/acknowledge`, {
                     method: 'POST'
                 });
                 setAlerts(alerts.filter(alert => alert.id !== id));
