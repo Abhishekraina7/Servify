@@ -114,8 +114,25 @@ npm install
 - Start the React development server:
 ```
 npm start
-
 ```
+![image](https://github.com/user-attachments/assets/8912c73b-c2dc-46e0-bf9e-6a7d25e2ac1b)
+- Replace the gemini api key with your own:
+  
+### Here is how to generate your own gemini api key:
+To obtain a Gemini API key, you need to sign up for a Google AI Studio account and create a new key within your account or select an existing Google Cloud Project. Once created, you can copy and save the key for use in your applications. 
+
+#### Here's a step-by-step guide:
+- **1. Sign in to Google AI Studio:**
+Navigate to the Google AI Studio website and log in with your Google account. 
+- **2. Create an API key:**
+Once logged in, you'll find instructions to create an API key. You can either create a new key or select an existing Google Cloud Project. 
+- **3. Agree to terms and conditions:**
+You'll be prompted to agree to the Gemini API's terms of service and privacy policy and may be asked if you'd like to receive email updates. 
+- **4. Create the API key:**
+Click "Create API key" to generate your API key. 
+- **5. Copy and save the key:**
+Once the API key is generated, copy it and store it securely. This key will be required for accessing the Gemini API in your applications.
+ 
 - The frontend will open in your browser at http://localhost:3000 and display the monitoring dashboard.
 
 #### 5.Verify the Application
