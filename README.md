@@ -140,7 +140,7 @@ Once the API key is generated, copy it and store it securely. This key will be r
 - Ensure the agent is running on the target server, the backend is active, and the frontend is accessible.
 - The dashboard should display real-time CPU, memory, and network charts based on data collected by the agent.
 
-  #### Troubleshooting
+#### Troubleshooting
 
 - Agent Issues: Check the agent’s logs for connection errors. Ensure it can communicate with the backend.
 
