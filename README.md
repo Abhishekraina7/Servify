@@ -154,7 +154,7 @@ Once the API key is generated, copy it and store it securely. This key will be r
 
 
 - **Alerting System:** Add notifications (e.g., email, Slack) for critical server events like high CPU or low memory.
-- ![Screenshot 2025-05-29 160213](https://github.com/user-attachments/assets/ac1e34d1-fbf4-435f-9350-f20a18f5822c)
+![Screenshot 2025-05-29 160213](https://github.com/user-attachments/assets/ac1e34d1-fbf4-435f-9350-f20a18f5822c)
 ![image](https://github.com/user-attachments/assets/385453fd-2bdb-45f1-8890-5b8de8a74015)
 - **Multi-Server Support:** Extend the agent and backend to monitor multiple servers simultaneously.
 ![Screenshot 2025-05-29 160203](https://github.com/user-attachments/assets/1c473e5a-5157-4c07-b9f2-ae65c67a746e)
